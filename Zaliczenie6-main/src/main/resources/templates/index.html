@@ -1,0 +1,540 @@
+
+<!DOCTYPE html>
+<html lang="pl" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restauracja - Wizytówka</title>
+    <link rel="stylesheet" href="style/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <link
+            href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:wght@400;700&display=swap"
+            rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f9f9f7;
+            color: #2a2a2a;
+            line-height: 1.7;
+            background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.9) 100%),
+            url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100" opacity="0.05"><path d="M50 0 L100 50 L50 100 L0 50 Z" fill="%23f8b500"/></svg>');
+            background-size: cover, 60px 60px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        .main-header {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            padding: 20px 0;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 40px;
+        }
+
+        .logo {
+            margin: 0;
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, #f8b500 0%, #fceabb 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            letter-spacing: 1px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .logo span {
+            font-weight: 300;
+            font-style: italic;
+        }
+
+        .logo::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, #f8b500 0%, #fceabb 100%);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.4s ease;
+        }
+
+        .logo:hover::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        .user-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1rem;
+            letter-spacing: 0.5px;
+        }
+
+        .user-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .user-btn svg {
+            transition: transform 0.3s ease;
+        }
+
+        .user-btn:hover svg {
+            transform: scale(1.1);
+        }
+
+        /* Responsywność */
+        @media (max-width: 768px) {
+            .header-container {
+                padding: 0 20px;
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .logo {
+                font-size: 2rem;
+                margin-bottom: 10px;
+            }
+
+            .user-btn {
+                padding: 10px 20px;
+            }
+        }
+        .slider-container {
+            max-width: 100vw;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+
+        .slider {
+            display: flex;
+            width: 300%; /* 3 zdjęcia = 300% */
+            animation: slide 15s infinite; /* Pełny cykl w 15s */
+        }
+
+        .slider img {
+            width: 33.333%; /* 1/3 szerokości kontenera */
+            height: 400px;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        @keyframes slide {
+            0% {
+                transform: translateX(0);
+            }
+
+            33% {
+                transform: translateX(-33.333%);
+            }
+
+            66% {
+                transform: translateX(-66.666%);
+            }
+
+            100% {
+                transform: translateX(0);
+            }
+        }
+        .about {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 40px;
+            max-width: 60vw;
+            margin: 0 auto;
+            color: #333;
+        }
+
+        .about h2 {
+            flex-basis: 100%;
+            text-align: center;
+        }
+
+        .about img {
+            /* flex: 0 0 50%; */
+            max-width: 40%;
+            margin-right: 10%;
+            align-self: center;
+        }
+
+        .about p {
+            flex: 0 0 50%;
+            text-align: left;
+            line-height: 1.8;
+            font-size: 1.2em;
+            margin: 0;
+        }
+
+        .location {
+            padding: 60px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .location h2 {
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 2em;
+            color: #333;
+        }
+
+        .map-text-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .map {
+            flex: 1;
+            min-width: 300px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .map iframe {
+            width: 100%;
+            height: 400px;
+            border: 0;
+            display: block;
+        }
+
+        .location-text-content {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .location-text-content p {
+            font-size: 1.1em;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            color: #555;
+        }
+
+        @media (max-width: 768px) {
+            .map-text-container {
+                flex-direction: column;
+                gap: 30px;
+            }
+
+            .map,
+            .location-text-content {
+                width: 100%;
+            }
+        }
+        .founders {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .founders h2 {
+            font-size: 2.2em;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .founder-intro {
+            max-width: 800px;
+            margin: 0 auto 40px;
+            font-size: 1.2em;
+            line-height: 1.6;
+            color: #555;
+        }
+
+        .founder-photos {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            margin: 40px 0;
+        }
+
+        .founder-photo-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .founder-photo-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .founder-photos img.round {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .founder-photos img.round:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .founder-name {
+            font-weight: 600;
+            font-size: 1.1em;
+            color: #444;
+        }
+
+        .founder-details {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .founder-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 40px;
+            text-align: left;
+            background: #fff;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            border-radius: 12px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .founder-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+        }
+
+        .founder-item img.detail-photo {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid #f8f8f8;
+        }
+
+        .founder-info {
+            flex: 1;
+        }
+
+        .founder-info h3 {
+            margin: 0 0 5px 0;
+            font-size: 1.5em;
+            color: #222;
+        }
+
+        .position {
+            font-style: italic;
+            color: #e67e22;
+            margin-bottom: 15px !important;
+            font-weight: 500;
+        }
+
+        .founder-item p {
+            margin: 0;
+            font-size: 1.1em;
+            line-height: 1.7;
+            color: #555;
+        }
+
+        @media (max-width: 768px) {
+            .founder-item {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                gap: 25px;
+            }
+
+            .founder-info {
+                text-align: center;
+            }
+
+            .founder-item img.detail-photo {
+                width: 150px;
+                height: 150px;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+<header class="main-header">
+    <div class="header-container">
+        <h1 class="logo">Smaki<span>Świata</span></h1>
+        <a href="/login" class="user-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                <path
+                        d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z" />
+            </svg>
+            Zaloguj się
+        </a>
+    </div>
+</header>
+</header>
+<div class="slider-container">
+    <div class="slider">
+        <img src="/zdjecia/slider1.jpg" alt="Nasze restauracja 1">
+        <img src="/zdjecia/slider2.jpg" alt="Nasze restauracja 2">
+        <img src="/zdjecia/slider3.jpg" alt="Nasze restauracja 3">
+    </div>
+</div>
+<section class="about">
+    <h2>O nas</h2>
+    <img src="/zdjecia/SliderystronawwwNOWERETRO1.png" alt="Slajd 1">
+    <p>Restauracja Smaki Świata powstała z miłości do kuchni i ludzi. Od ponad 10 lat tworzymy miejsce, gdzie każdy
+        znajdzie coś dla siebie — od klasycznych dań kuchni polskiej, przez aromatyczne potrawy śródziemnomorskie,
+        aż po egzotyczne smaki Azji.
+
+        Nasza filozofia opiera się na świeżości składników, pasji do gotowania i dbałości o każdy detal. Wierzymy,
+        że jedzenie to nie tylko potrzeba, ale także przyjemność i sztuka. Dlatego nasi kucharze nieustannie szukają
+        nowych inspiracji, aby zaskoczyć podniebienia naszych gości.
+
+        Wnętrze restauracji zostało zaprojektowane tak, aby każdy czuł się u nas komfortowo — zarówno podczas
+        rodzinnego obiadu, romantycznej kolacji, jak i spotkania biznesowego. Dbamy o ciepłą atmosferę, przyjazną
+        obsługę i niezapomniane kulinarne doświadczenia.
+
+        Zapraszamy serdecznie do Smaków Świata — miejsca, gdzie smak i pasja spotykają się na talerzu!</p>
+</section>
+
+<section class="location">
+    <h2>Lokalizacja</h2>
+    <div class="map-text-container">
+        <div class="map">
+            <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2436.666825685432!2d21.012228315783306!3d52.229675979757504!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x471ecc6693c9c6ed%3A0xdee47083d8d7c1b2!2sWarszawa!5e0!3m2!1spl!2spl!4v1615362554262!5m2!1spl!2spl"
+                    allowfullscreen="" loading="lazy"></iframe>
+        </div>
+        <div class="location-text-content">
+            <p>Restauracja Smaki Świata znajduje się w samym sercu miasta, zaledwie kilka minut spacerem od głównego
+                placu. Z łatwym dostępem z głównych dróg, oferujemy komfortowe warunki zarówno dla osób
+                zmotoryzowanych, jak i korzystających z komunikacji miejskiej.</p>
+            <p>Nasza lokalizacja to idealne miejsce na spotkanie z przyjaciółmi, rodziną lub biznesowe rozmowy. W
+                pobliżu znajdziesz wiele atrakcji turystycznych, a także przestronne parkingi, które umożliwiają
+                wygodne zaparkowanie pojazdu.</p>
+            <p>Zachęcamy do odwiedzin i skosztowania naszych wyjątkowych dań w przyjemnej atmosferze!</p>
+        </div>
+    </div>
+</section>
+
+<section class="founders">
+    <h2>Nasz Zespół</h2>
+    <div class="founder-intro">
+        <p>Poznaj ludzi, którzy stoją za sukcesem Smaków Świata. Nasz zespół to pasjonaci kulinarni z wieloletnim
+            doświadczeniem.</p>
+    </div>
+
+    <div class="founder-photos">
+        <!-- Zdjęcia w okrągłych ramkach -->
+        <div class="founder-photo-item">
+            <img src="./zdjecia/mb.jpg" alt="Mateusz Biernacki - Szef Kuchni" class="round">
+            <span class="founder-name">Mateusz Biernacki</span>
+        </div>
+        <div class="founder-photo-item">
+            <img src="./zdjecia/bk.jpg" alt="Bartosz Krawiś - Manager" class="round">
+            <span class="founder-name">Bartosz Krawiś</span>
+        </div>
+        <div class="founder-photo-item">
+            <img src="./zdjecia/fp.jpg" alt="Filip Piskorz - Sommelier" class="round">
+            <span class="founder-name">Filip Piskorz</span>
+        </div>
+        <div class="founder-photo-item">
+            <img src="./zdjecia/mk.jpg" alt="Martyna Królikowska - Pastry Chef" class="round">
+            <span class="founder-name">Martyna Królikowska</span>
+        </div>
+    </div>
+
+    <div class="founder-details">
+        <!-- Szczegółowe informacje -->
+        <div class="founder-item">
+            <img src="/zdjecia/mb.jpg" alt=" Mateusz Biernacki" class="detail-photo">
+            <div class="founder-info">
+                <h3>Mateusz Biernacki</h3>
+                <p class="position">Szef Kuchni</p>
+                <p>Z pasją łączy tradycję z nowoczesnością, tworząc dania, które opowiadają historie. Absolwent
+                    paryskiego Le Cordon Bleu z 15-letnim doświadczeniem w michelinowskich restauracjach Europy.
+                    Jego specjalność to reinterpretacja polskich klasyków z zaskakującymi akcentami – jak pierogi z
+                    kaczką konfitowaną i żurawinowym purée. W kuchni wymaga precyzji, ale jego energia inspiruje
+                    cały zespół. Po godzinach prowadzi kulinarne podcasty.</p>
+            </div>
+        </div>
+
+        <div class="founder-item">
+            <img src="./zdjecia/bk.jpg" alt="Bartosz Krawiś " class="detail-photo">
+            <div class="founder-info">
+                <h3>Bartosz Krawiś </h3>
+                <p class="position">Manager</p>
+                <p>Perfekcjonista z krwi i kości, który zamienia chaos w nienaganną organizację. Wcześniej kierował
+                    zespołami w luksusowych kurortach Alpejskich, gdzie nauczył się, że detale decydują o wyjątkowym
+                    doświadczeniu gości. Jego supermoc? Antycypowanie potrzeb klientów – zanim zdążą je
+                    wypowiedzieć. Wprowadził innowacyjny system rezerwacji, który stał się wzorem dla innych
+                    restauracji. Po godzinach zapalony narciarz i kolekcjoner rare’owych whisky.</p>
+            </div>
+        </div>
+
+        <div class="founder-item">
+            <img src="./zdjecia/fp.jpg" alt="Filip Piskorz" class="detail-photo">
+            <div class="founder-info">
+                <h3>Filip Piskorz</h3>
+                <p class="position">Sommelier</p>
+                <p>Wirtuoz winnych harmonii z certyfikatami WSET Level 4. Potrafi dobrać trunek nie tylko do
+                    potrawy, ale nawet do… nastroju gościa. Jego piwnica to ponad 500 pozycji, w tym mało znane
+                    perełki z Mołdawii czy Gruzji. Prowadzi cotygodniowe degustacje z opowieściami o winnicach –
+                    jego wykład o burgundach potrafi trwać 3 godziny i nikt nie chce wychodzić!</p>
+            </div>
+        </div>
+        <div class="founder-item">
+            <img src="./zdjecia/mk.jpg" alt="Martyna Królikowska" class="detail-photo">
+            <div class="founder-info">
+                <h3>Martyna Królikowska</h3>
+                <p class="position">Pastry Chef</p>
+                <p>Mistrzyni deserów z wykształceniem cukierniczym z Brukseli. Jej słodkie kreacje to połączenie
+                    finezji i śmiałych smaków. Specjalizuje się w deserach bezglutenowych i wegańskich,
+                    udowadniając, że zdrowe może być wyjątkowo pyszne. Każdy jej wypiek to małe dzieło sztuki, które
+                    zachwyca zarówno wyglądem, jak i smakiem. W wolnym czasie prowadzi warsztaty cukiernicze dla
+                    dzieci i dorosłych.</p>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+
+</html>

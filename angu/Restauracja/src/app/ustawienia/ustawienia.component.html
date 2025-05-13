@@ -1,0 +1,27 @@
+<div class="settings-container">
+    <main class="settings-content">
+        <!-- Sekcja Profil -->
+        <section id="profile" class="settings-section active">
+            <h2><i class="fas fa-user"></i> Moje dane</h2>
+            <form>
+                <div class="form-group">
+                    <label for="name">Nazwa Użytkownika</label>
+                    <input type="text" id="name" class="form-control" [value]="username" disabled>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" class="form-control" [value]="email" disabled>
+                </div>
+
+                <div class="form-group">
+                    <a routerLink="/rezerwacja" class="btn btn-primary">
+                        <i class="fas fa-calendar-alt"></i> Zarezerwuj stolik
+                    </a>
+                    <a routerLink="/historia" class="btn btn-primary" style="margin-left: 10px;">
+                        <i class="fas fa-history"></i> Historia rezerwacji
+                    </a>
+                </div>
+            </form>
+        </section>
+    </main>
+</div>

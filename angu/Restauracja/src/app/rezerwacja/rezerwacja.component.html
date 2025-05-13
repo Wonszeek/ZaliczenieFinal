@@ -1,0 +1,90 @@
+<div class="reservation-container">
+  <h2>Zarezerwuj stolik</h2>
+
+  <div *ngIf="reservationSuccess" class="alert alert-success">
+    Rezerwacja została pomyślnie złożona!
+  </div>
+
+  <div *ngIf="errorMessage" class="alert alert-danger">
+    {{ errorMessage }}
+  </div>
+
+  <div class="calendar-controls">
+    <button (click)="prevMonth()" [disabled]="currentDate.getMonth() === today.getMonth() && currentDate.getFullYear() === today.getFullYear()" class="prev-month">
+      &lt;
+    </button>
+    <h3>{{ getMonthYear() }}</h3>
+    <button (click)="nextMonth()" class="next-month">
+      &gt;
+    </button>
+  </div>
+
+  <div class="calendar-grid">
+    <div *ngFor="let day of dayNames" class="day-name">{{ day }}</div>
+    <div *ngFor="let _ of [].constructor(getFirstDayOfWeek())" class="empty-day"></div>
+    <div
+      *ngFor="let day of [].constructor(getDaysInMonth()); let i = index"
+      class="day"
+      [class.past-day]="isPastDay(i + 1)"
+      [class.selected-day]="isDateSelected(i + 1)"
+      (click)="!isPastDay(i + 1) && selectDate(i + 1)"
+    >
+      {{ i + 1 }}
+    </div>
+  </div>
+
+  <div *ngIf="selectedDate" class="time-selection">
+    <h3>Wybierz godzinę rozpoczęcia:</h3>
+    <div class="time-buttons">
+      <button
+        *ngFor="let time of hours"
+        [class.selected]="isTimeSelected(time, true)"
+        [disabled]="isTimeDisabled(time, true)"
+        (click)="selectTime(time, true)"
+      >
+        {{ time }}
+      </button>
+    </div>
+
+    <h3>Wybierz godzinę zakończenia:</h3>
+    <div class="time-buttons">
+      <button
+        *ngFor="let time of hours"
+        [class.selected]="isTimeSelected(time, false)"
+        [disabled]="isTimeDisabled(time, false)"
+        (click)="selectTime(time, false)"
+      >
+        {{ time }}
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="selectedDate && selectedStartTime && selectedEndTime" class="people-selection">
+    <h3>Ilość osób:</h3>
+    <div class="people-control">
+      <button (click)="decrementPeople()">-</button>
+      <span>{{ peopleCount }}</span>
+      <button (click)="incrementPeople()">+</button>
+    </div>
+  </div>
+
+  <div *ngIf="availableTables.length > 0" class="tables-selection">
+    <h3>Dostępne stoliki:</h3>
+    <div class="tables-list">
+      <div
+        *ngFor="let table of availableTables"
+        class="table-card"
+        [class.selected]="isTableSelected(table.id)"
+        (click)="selectTable(table.id)"
+      >
+        <h4>{{ table.name }}</h4>
+        <p>{{ table.description }}</p>
+        <p>Rozmiar: {{ table.size }} osoby</p>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="selectedTableId" class="reservation-confirm">
+    <button (click)="makeReservation()">Potwierdź rezerwację</button>
+  </div>
+</div>

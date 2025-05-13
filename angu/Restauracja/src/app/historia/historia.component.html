@@ -1,0 +1,28 @@
+<div class="reservation-history">
+  <h2>Historia Rezerwacji</h2>
+
+  <div *ngIf="isLoading" class="loading">
+    <p>Ładowanie historii rezerwacji...</p>
+  </div>
+
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+  </div>
+
+  <div *ngIf="!isLoading && reservations.length === 0" class="no-reservations">
+    <p>Brak historii rezerwacji</p>
+  </div>
+
+  <div *ngIf="!isLoading && reservations.length > 0" class="reservation-list">
+    <div class="reservation-card" *ngFor="let reservation of reservations">
+      <div class="reservation-header">
+        <h3>Stolik {{ reservation.tableName }} ({{ reservation.tableSize }} os.)</h3>
+      </div>
+      <div class="reservation-details">
+        <p><strong>Data:</strong> {{ formatDate(reservation.date) }}</p>
+        <p><strong>Godziny:</strong> {{ formatTime(reservation.startTime) }} - {{ formatTime(reservation.endTime) }}</p>
+        <p><strong>Ilość osób:</strong> {{ reservation.people }}</p>
+      </div>
+    </div>
+  </div>
+</div>
